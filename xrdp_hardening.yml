@@ -21,7 +21,7 @@
     line: 'password=data_scientist'
     backrefs: yes
     
-- name: Create local dummy user (data_scientist) for XRDP service
+- name: Create local dummy user for XRDP service
   user:
     name: data_scientist
     comment: Data Scientist local account for XRDP
