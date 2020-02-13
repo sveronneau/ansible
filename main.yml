@@ -4,12 +4,12 @@
   become: true
 
   tasks:
-# tasks file for ansible-role-ai
+  # tasks file for ansible-role-ai
 
-- name: Install packages
-  import_tasks: packages.yml
-  become: yes
+  - name: Install packages
+    import_tasks: packages.yml
+    become: yes
 
-- name: Prep for XRDP
-  import_tasks: xrdp_hardening.yml
-  become: yes
+  - name: Prep for XRDP
+    import_tasks: xrdp_hardening.yml
+    become: yes
