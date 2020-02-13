@@ -1,5 +1,9 @@
 ---
 
+- hosts: all
+  become: true
+
+  tasks:
 # tasks file for ansible-role-ai
 
 - name: Install packages
