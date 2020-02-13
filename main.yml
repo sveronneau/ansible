@@ -2,14 +2,20 @@
 
 - hosts: all
   become: true
+  vars_files:
+    - my_vault.yml
 
   tasks:
-  # tasks file for ansible-role-ai
+# tasks file for ansible-role-ai
 
   - name: Install packages
     import_tasks: packages.yml
     become: yes
 
-  - name: Prep for XRDP
+  - name: Harden XRDP
     import_tasks: xrdp_hardening.yml
+    become: yes
+
+  - name: Create local user for XRDP
+    import_tasks: local_rdp_user.yml
     become: yes
