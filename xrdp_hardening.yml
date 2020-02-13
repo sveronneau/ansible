@@ -11,23 +11,15 @@
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
     regexp: '^(.*)username=ask(.*)$'
-    line: 'username=data_scientist'
+    line: 'username=datascientist'
     backrefs: yes
 
 - name: Set local password for RDP connection in xrdp.ini
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
     regexp: '^(.*)password=ask(.*)$'
-    line: 'password=data_scientist'
+    line: 'password=$DataSci3ntist!$'
     backrefs: yes
-    
-- name: Create local dummy user for XRDP service
-  user:
-    name: data_scientist
-    comment: Data Scientist local account for XRDP
-    shell: /bin/bash
-    password: TBD
-    expires: -1
 
 - name: Restart service xrdp to apply hardened configs
   service:
