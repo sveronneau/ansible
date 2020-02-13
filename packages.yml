@@ -1,0 +1,127 @@
+---
+
+- name: Install Centos Epel Repo
+  yum:
+    name: epel-release
+  when: ansible_distribution == "CentOS"
+
+- name: Install java and utils
+  yum:
+    name: "{{item}}"
+    state: present
+  loop:
+    - java-1.8.0-openjdk
+    - java-1.8.0-openjdk-devel
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: Add docker repository
+  shell: yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install docker and python
+  yum:
+    name: "{{item}}"
+    state: present
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - centos-release-scl
+    - rh-python36
+    - rh-python36-python-tkinter
+    - xrdp
+    - tigervnc-server
+    - gcc
+    - git
+
+- name: Start service docker, if not started
+  service:
+    name: docker
+    state: started
+
+- name: Install the remote desktop group package YUM
+  yum:
+    name: "{{item}}"
+    state: present
+  loop:
+    - "@^gnome-desktop-environment"
+    - "@^graphical-server-environment"
+    - "@^mate-desktop-environment"
+
+- name: Create a symbolic link
+  file:
+    src: /lib/systemd/system/runlevel5.target
+    dest: /etc/systemd/system/default.target
+    state: link
+
+- name: Start service xrdp, if not started
+  service:
+    name: xrdp
+    state: started
+
+- name: Enable service xrdp, and not touch the state
+  service:
+    name: xrdp
+    enabled: yes
+
+- rpm_key:
+    state: present
+    key: https://packages.microsoft.com/keys/microsoft.asc
+
+- name: Add docker repository
+  shell: echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo
+  args:
+    creates: /etc/yum.repos.d/vscode.repo
+
+- name: Install VSCode
+  yum:
+    name:
+      - code
+    state: present
+
+- name: Install Dbeaver RPM
+  yum:
+    name: https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm
+    state: present
+
+- name: Install Chrome RPM
+  yum:
+    name: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    state: present
+
+- name: Download PyCharm (2.3)
+  get_url:
+    url: https://download.jetbrains.com/python/pycharm-community-2019.2.3.tar.gz
+    dest: /opt/
+
+- name: Unarchive PyCharm zip file
+  unarchive:
+    src: /opt/pycharm-community-2019.2.3.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Create a symbolic link PyCharm
+  file:
+    src: /opt/pycharm-community-2019.2.3/bin/pycharm.sh
+    dest: /usr/bin/pycharm
+    state: link
+
+- name: Download IntelliJ (2.3)
+  get_url:
+    url: https://download.jetbrains.com/idea/ideaIC-2019.2.3.tar.gz
+    dest: /opt/
+
+- name: Unarchive IntelliJ zip file
+  unarchive:
+    src: /opt/ideaIC-2019.2.3.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Create a symbolic link IntelliJ
+  file:
+    src: /opt/idea-IC-192.6817.14/bin/idea.sh
+    dest: /usr/bin/idea
+    state: link
