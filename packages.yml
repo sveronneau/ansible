@@ -3,7 +3,7 @@
 - name: Install Centos Epel Repo
   yum:
     name: epel-release
-  when: ansible_distribution == "CentOS"
+  #when: ansible_distribution == "CentOS"
 
 - name: Install java and utils
   yum:
