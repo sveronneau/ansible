@@ -5,4 +5,4 @@ To generate the my_vault.yml file:
 * ansible-vault create my_vault
 * Enter your Vault password
 * Then put this in the file
-** my_password: you_password
+* my_password: you_password
