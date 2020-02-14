@@ -1,23 +1,23 @@
 ---
-  
+
 - name: Lockdown XRDP to accept connections only on localhost
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
-    regexp: '^(.*)port=3389(.*)$'
+    regexp: '^port=3389'
     line: 'port=tcp://.:3389'
     backrefs: yes
 
 - name: Set local username for RDP connection in xrdp.ini
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
-    regexp: '^(.*)username=ask(.*)$'
+    regexp: '^username=ask'
     line: 'username=datascientist'
     backrefs: yes
 
 - name: Set local password for RDP connection in xrdp.ini
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
-    regexp: '^(.*)password=ask(.*)$'
+    regexp: '^password=ask'
     line: 'password={{ my_password }}'
     backrefs: yes
 
