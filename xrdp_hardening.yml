@@ -1,5 +1,5 @@
 ---
-
+  
 - name: Lockdown XRDP to accept connections only on localhost
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
@@ -18,7 +18,7 @@
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
     regexp: '^(.*)password=ask(.*)$'
-    line: 'password=$DataSci3ntist!$'
+    line: 'password={{ my_password }}'
     backrefs: yes
 
 - name: Restart service xrdp to apply hardened configs
