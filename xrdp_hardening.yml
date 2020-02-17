@@ -18,8 +18,9 @@
   lineinfile:
     dest: /etc/xrdp/xrdp.ini
     regexp: '^password=ask'
-    line: 'password={{ my_password }}'
-    line: 'password={{ \'passw0rd!\' | password_hash(\'sha512\') }}'
+    #With ansible-vault -> line: 'password={{ my_password }}'
+    #if file supports hashed values -> line: 'password={{ \'passw0rd!\' | password_hash(\'sha512\') }}'
+    line:'password=Passw0rd!'
     backrefs: yes
 
 - name: Restart service xrdp to apply hardened configs
