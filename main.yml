@@ -2,8 +2,9 @@
 
 - hosts: all
   become: true
-  vars_files:
-    - my_vault.yml
+  # if using ansible-vault
+  #vars_files:
+  #  - my_vault.yml
 
   tasks:
 # tasks file for ansible-role-ai
