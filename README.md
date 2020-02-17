@@ -6,3 +6,5 @@ To generate the my_vault.yml file:
 * Enter your Vault password
 * Then put this in the file
 * my_password: you_password
+
+the Ansible-Vault config is all commented right now.  Plz adjust to your needs.
