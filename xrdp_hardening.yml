@@ -19,6 +19,7 @@
     dest: /etc/xrdp/xrdp.ini
     regexp: '^password=ask'
     line: 'password={{ my_password }}'
+    line: 'password={{ \'passw0rd!\' | password_hash(\'sha512\') }}'
     backrefs: yes
 
 - name: Restart service xrdp to apply hardened configs
