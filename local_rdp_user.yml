@@ -5,5 +5,5 @@
     name: datascientist
     comment: Data Scientist local account for XRDP
     shell: /bin/bash
-    password: "{{ 'passw0rd!' | password_hash('sha512') }}"
+    password: "{{ 'Passw0rd!' | password_hash('sha512') }}"
     expires: -1
