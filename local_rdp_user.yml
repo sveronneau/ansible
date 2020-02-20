@@ -1,6 +1,6 @@
 ---
 
-- name: Create local dummy user for XRDP service
+- name: Create local dummy user for XRDP service with hashed password
   user:
     name: datascientist
     comment: Data Scientist local account for XRDP
