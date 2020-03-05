@@ -1,0 +1,56 @@
+---
+- name: Install XRDP
+  yum:
+    name: "{{item}}"
+    state: present
+  loop:
+    - xrdp
+
+- name: Start service XRDP, if not started
+  service:
+    name: xrdp
+    state: started
+
+- name: Enable service XRDP, and not touch the state
+  service:
+    name: xrdp
+    enabled: yes
+
+- name: Generate random password to create XRDP user
+  set_fact:
+    random_password: "{{ lookup('password', '/dev/null') }}"
+
+- name: Create XRDP local user
+  user:
+    name: datascientist
+    comment: Data Scientist local account for XRDP
+    shell: /bin/bash
+    password: "{{ random_password }}"
+    expires: -1
+
+- name: Lockdown XRDP to accept connections only on localhost
+  lineinfile:
+    dest: /etc/xrdp/xrdp.ini
+    regexp: "^port=3389"
+    line: "port=tcp://.:3389"
+    backrefs: yes
+
+- name: Set local username for RDP connection in xrdp.ini
+  lineinfile:
+    dest: /etc/xrdp/xrdp.ini
+    regexp: "^username=ask"
+    line: "username=datascientist"
+    backrefs: yes
+
+- name: Set local password for RDP connection in xrdp.ini
+  lineinfile:
+    dest: /etc/xrdp/xrdp.ini
+    regexp: "^password=ask"
+    line: "password={{ random_password }}"
+    backrefs: yes
+
+- name: Restart service xrdp to apply hardened configs
+  service:
+    name: xrdp
+    state: restarted
+    
