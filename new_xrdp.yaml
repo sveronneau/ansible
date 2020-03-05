@@ -25,32 +25,22 @@
     name: datascientist
     comment: Data Scientist local account for XRDP
     shell: /bin/bash
-    password: "{{ random_password }}"
+    password: "{{ random_password | password_hash('sha512') }}"
     expires: -1
 
-- name: Lockdown XRDP to accept connections only on localhost
-  lineinfile:
-    dest: /etc/xrdp/xrdp.ini
-    regexp: "^port=3389"
-    line: "port=tcp://.:3389"
-    backrefs: yes
-
-- name: Set local username for RDP connection in xrdp.ini
-  lineinfile:
-    dest: /etc/xrdp/xrdp.ini
-    regexp: "^username=ask"
-    line: "username=datascientist"
-    backrefs: yes
-
-- name: Set local password for RDP connection in xrdp.ini
-  lineinfile:
-    dest: /etc/xrdp/xrdp.ini
-    regexp: "^password=ask"
-    line: "password={{ random_password }}"
-    backrefs: yes
+- name: Configure XRDP server
+  ini_file:
+    path: /etc/xrdp/xrdp.ini
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - { section: "Globals", option: "port", value: "tcp://.:3389" }
+    - { section: "Xvnc", option: "username", value: "datascientist" }
+    - { section: "Xvnc", option: "password", value: "{{ random_password }}" }
+  no_log: True
 
 - name: Restart service xrdp to apply hardened configs
   service:
     name: xrdp
     state: restarted
-    
